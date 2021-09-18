@@ -8,3 +8,9 @@ def index(request):
         "entries": util.list_entries()
     })
 
+def entry(request):
+    # if request.medthod == "POST":
+    #     name =
+    return render(request, "encyclopedia/entry.html", {
+        "name": util.get_entry()
+    })
