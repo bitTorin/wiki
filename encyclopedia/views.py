@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from . import util
@@ -11,6 +12,8 @@ def index(request):
 def entry(request):
     # if request.medthod == "POST":
     #     name =
-    return render(request, "encyclopedia/entry.html", {
-        "name": util.get_entry()
-    })
+    # return render(request, "encyclopedia/entry.html", {
+    #     "name": util.get_entry(request)
+    # })
+
+    return HttpResponse("Hello World")
