@@ -15,3 +15,8 @@ def entry(request, title):
         "title": title.capitalize,
         "content": util.get_entry(title)
     })
+
+def search(request, inquiry):
+    return render(request, "encyclopedia/search.html", {
+     # TODO
+    })
