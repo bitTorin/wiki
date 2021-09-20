@@ -10,8 +10,8 @@ def index(request):
     })
 
 def entry(request, title):
-    # if request.medthod == "POST":
-    #     name =
+
     return render(request, "encyclopedia/entry.html", {
-        "title": util.get_entry(title)
+        "title": title.capitalize,
+        "content": util.get_entry(title)
     })
