@@ -5,8 +5,11 @@ from django.urls import reverse
 
 from . import util
 
-# class NewEntryForm(forms.form):
-#     entry = forms.CharField(label="Add Entry")
+class SearchForm(forms.Form):
+    inquiry = forms.CharField(label="inquiry")
+
+class NewEntryForm(forms.Form):
+    entry = forms.CharField(label="Add Entry")
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -21,10 +24,22 @@ def entry(request, title):
     })
 
 def search(request):
-
-    return render(request, "encyclopedia/search.html", {
-        "entries": util.list_entries()
-    })
+    form = SearchForm(request.POST)
+    if form.is_valid():
+        inquiry = form.cleaned_data["inquiry"]
+        entries = util.list_entries()
+        for entry in entries:
+            if inquiry == entry:
+                title = inquiry.capitalize
+                return HttpResponseRedirect(reverse("title:entry"))
+            else:
+                return render(request, "encyclopedia/search.html", {
+                "results": util.list_entries(entry)
+                })
+    else:
+        return render(request, "encyclopedia/index.html", {
+            "form": NewTaskForm()
+        })
 
 # def add(request):
 #     if request.method == "POST":
