@@ -5,6 +5,8 @@ from django.urls import reverse
 
 from . import util
 
+entries = []
+
 class SearchForm(forms.Form):
     inquiry = forms.CharField(label="inquiry")
 
@@ -24,22 +26,14 @@ def entry(request, title):
     })
 
 def search(request):
-    form = SearchForm(request.POST)
-    if form.is_valid():
-        inquiry = form.cleaned_data["inquiry"]
-        entries = util.list_entries()
-        for entry in entries:
-            if inquiry == entry:
-                title = inquiry.capitalize
-                return HttpResponseRedirect(reverse("title:entry"))
-            else:
-                return render(request, "encyclopedia/search.html", {
-                "results": util.list_entries(entry)
-                })
-    else:
-        return render(request, "encyclopedia/index.html", {
-            "form": NewTaskForm()
-        })
+    entries = util.list_entries()
+    inquiry = request.GET.get("q","")
+    if inquiry in entries:
+        return redirect (entry, inquiry)
+    results = [entry for entry in entries if inquiry.lower() in entry.lower()]
+    return render(request, "encyclopedia/search.html", {
+        "entries": results
+    })
 
 # def add(request):
 #     if request.method == "POST":
