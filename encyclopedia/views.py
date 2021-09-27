@@ -30,7 +30,12 @@ def search(request):
     inquiry = request.GET.get("q","")
     if inquiry in entries:
         return redirect (entry, inquiry)
-    results = [entry for entry in entries if inquiry.lower() in entry.lower()]
+    # results = [entry for entry in entries if inquiry.lower() in entry.lower()]
+    results = []
+    for entry in entries:
+        if inquiry.lower() in entry.lower():
+            results.append(entry)
+
     return render(request, "encyclopedia/search.html", {
         "entries": results
     })
