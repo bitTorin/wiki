@@ -30,7 +30,6 @@ def search(request):
     inquiry = request.GET.get("q","")
     if inquiry in entries:
         return redirect (entry, inquiry)
-    # results = [entry for entry in entries if inquiry.lower() in entry.lower()]
     results = []
     for entry in entries:
         if inquiry.lower() in entry.lower():
