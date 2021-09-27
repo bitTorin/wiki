@@ -1,6 +1,6 @@
 from django import forms
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from . import util
@@ -10,8 +10,10 @@ entries = []
 class SearchForm(forms.Form):
     inquiry = forms.CharField(label="inquiry")
 
-class NewEntryForm(forms.Form):
-    entry = forms.CharField(label="Add Entry")
+class NewPageForm(forms.Form):
+    title = forms.CharField(label="Page Title")
+    content = forms.CharField(label="Page Content")
+
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -38,6 +40,29 @@ def search(request):
     return render(request, "encyclopedia/search.html", {
         "entries": results
     })
+
+def create(request):
+    return render (request, "encyclopedia/create.html", {
+    "form": NewPageForm()
+    })
+
+
+def add(request):
+    if request.method == "POST":
+        form = NewPageForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+            entries = util.list_entries()
+            if title in entries:
+                return HttpResponse("Error: Entry already exists")
+            else:
+                new_entry = util.save_entry(title, content)
+                return redirect (entry, title)
+    else:
+        return render(request, "encyclopedia/create.html", {
+        "form": NewPageForm()
+        })
 
 # def add(request):
 #     if request.method == "POST":

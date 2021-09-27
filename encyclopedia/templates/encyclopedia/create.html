@@ -7,11 +7,20 @@
 {% block body %}
     <h1>Create New Page</h1>
 
-    <form action="{% url 'create' %}" style="margin-top: 25px">
-      <input placeholder="Page Title">
+    <form action="{% url 'add' %}" method="POST" style="margin-top: 25px">
+      {% csrf_token %}
+      <input placeholder="Page Title" id="title" name="title">
       <br>
-      <textarea id="newcontent" name="content" placeholder="Page Content" rows="3" cols="10" style="height: 35vh; width: 45vw; margin-bottom: 10px; margin-top: 10px"></textarea>
+      <textarea id="content" name="content" placeholder="Page Content" rows="3" cols="10" style="height: 35vh; width: 45vw; margin-bottom: 10px; margin-top: 10px"></textarea>
       <br>
+      <!-- <h5>Page Title</h5>
+      {{ form.title }}
+      <br>
+      <h5 style="margin-top:10px">Page Content</h5>
+      <div style="margin-bottom: 10px">
+        {{ form.content }}
+      </div>
+      <br> -->
       <input type="submit" value="Submit">
     </form>
 
