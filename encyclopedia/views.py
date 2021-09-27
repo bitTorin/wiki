@@ -10,7 +10,7 @@ entries = []
 class SearchForm(forms.Form):
     inquiry = forms.CharField(label="inquiry")
 
-class NewPageForm(forms.Form):
+class EntryForm(forms.Form):
     title = forms.CharField(label="Page Title")
     content = forms.CharField(label="Page Content")
 
@@ -43,13 +43,13 @@ def search(request):
 
 def create(request):
     return render (request, "encyclopedia/create.html", {
-    "form": NewPageForm()
+    "form": EntryForm()
     })
 
 
 def add(request):
     if request.method == "POST":
-        form = NewPageForm(request.POST)
+        form = EntryForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data["title"]
             content = form.cleaned_data["content"]
@@ -61,21 +61,24 @@ def add(request):
                 return redirect (entry, title)
     else:
         return render(request, "encyclopedia/create.html", {
-        "form": NewPageForm()
+        "form": EntryForm()
         })
 
-# def add(request):
-#     if request.method == "POST":
-#         form = NewEntryForm(request.POST)
-#         if form.is_valid():
-#             entry = form.cleaned_data["entry"]
-#             request.session["entries"] += [entry]
-#             return HttpResponseRedirect(reverse("entries:title"))
-#         else:
-#             return render(request, "encyclopedia/index.html", {
-#                 "form": form
-#             })
-#     else:
-#         return render(request, "encyclopedia/index.html", {
-#             "form": NewTaskForm()
-#         })
+def edit(request, title):
+    return render(request, "encyclopedia/edit.html", {
+        "title": title.capitalize,
+        "content": util.get_entry(title)
+    })
+
+def revise(request):
+    if request.method == "POST":
+        form = EntryForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+            revise_entry = util.save_entry(title, content)
+            return redirect (entry, title)
+    else:
+        return render(request, "encyclopedia/edit.html", {
+            "title": title.capitalize
+        })
