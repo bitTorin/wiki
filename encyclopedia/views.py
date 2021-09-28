@@ -3,8 +3,11 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from random import randint
+from markdown2 import Markdown
 
 from . import util
+
+md = Markdown()
 
 entries = []
 
@@ -22,10 +25,10 @@ def index(request):
     })
 
 def entry(request, title):
-
+    md_text = util.get_entry(title)
     return render(request, "encyclopedia/entry.html", {
         "title": title.capitalize,
-        "content": util.get_entry(title)
+        "content": md.convert(md_text)
     })
 
 def search(request):
