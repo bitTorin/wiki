@@ -2,6 +2,7 @@ from django import forms
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from random import randint
 
 from . import util
 
@@ -82,3 +83,9 @@ def revise(request):
         return render(request, "encyclopedia/edit.html", {
             "title": title.capitalize
         })
+
+def random(request):
+    entries = util.list_entries()
+    x = randint(1, len(entries))
+    title = entries[x]
+    return redirect (entry, title)
